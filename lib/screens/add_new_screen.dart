@@ -26,50 +26,70 @@ class _AddNewScreenState extends State<AddNewScreen> {
               padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
               child: Stack(
                 children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.06,
-                    decoration: BoxDecoration(
-                      color: kWhite,
-                      borderRadius: BorderRadius.circular(100),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      decoration: BoxDecoration(
+                        color: kWhite,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedMethod = 0;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: _selectedMethod == 0 ? kRed : kWhite,
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+                                child: Text("Expence", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: _selectedMethod==0 ? kWhite : kBlack),),
+                              )),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _selectedMethod = 1;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: _selectedMethod == 1 ? kGreen : kWhite,
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
+                                child: Text("Income", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: _selectedMethod==1 ? kWhite : kBlack),),
+                              )),
+                          ),
+                        ],
+                      ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMethod = 0;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: _selectedMethod == 0 ? kRed : kWhite,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
-                              child: Text("Expence", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: _selectedMethod==0 ? kWhite : kBlack),),
-                            )),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _selectedMethod = 1;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: _selectedMethod == 1 ? kGreen : kWhite,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 10),
-                              child: Text("Income", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: _selectedMethod==1 ? kWhite : kBlack),),
-                            )),
-                        ),
+                        Text("How Much?", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: kWhite)),
+                        TextField(
+                    style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: kWhite ),
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "0.00",
+                      hintStyle: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: kWhite.withOpacity(0.5) ),
+                  ),
+                  ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
