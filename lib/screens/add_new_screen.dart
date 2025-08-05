@@ -1,6 +1,7 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/const_values.dart';
 import 'package:expenz/models/expence_model.dart';
+import 'package:expenz/models/income_model.dart';
 import 'package:flutter/material.dart';
 
 class AddNewScreen extends StatefulWidget {
@@ -14,7 +15,9 @@ class _AddNewScreenState extends State<AddNewScreen> {
 
   //state to track expence or income
   int _selectedMethod = 0;
-  
+  ExpenceCategories _expenceCategory = ExpenceCategories.health;
+  IncomeCategory _incomeCategory = IncomeCategory.salary;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,12 +122,31 @@ class _AddNewScreenState extends State<AddNewScreen> {
                                   borderRadius: BorderRadius.circular(100),
                                 ),
                               ),
-                              items: ExpenceCategories.values.map((category) {
+                              items: _selectedMethod==0 ? ExpenceCategories.values.map((category) {
                               return DropdownMenuItem(
                                 value: category,
                                 child: Text(category.name),
                               );
-                            }).toList(), onChanged: (value){})
+                            }).toList()
+                            :
+                            IncomeCategory.values.map((category) {
+                              return DropdownMenuItem(
+                                value: category,
+                                child: Text(category.name),
+                              );
+                            }).toList(),
+                            value: _selectedMethod == 0 ? _expenceCategory : _incomeCategory,
+                            onChanged: (value){
+                              if (_selectedMethod == 0) {
+                                setState(() {
+                                  _expenceCategory = value as ExpenceCategories;
+                                });
+                              } else {
+                                setState(() {
+                                  _incomeCategory = value as IncomeCategory;
+                                });
+                              }
+                            })
                           ]
                         ),
                       ),
