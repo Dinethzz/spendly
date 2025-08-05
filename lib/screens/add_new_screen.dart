@@ -1,5 +1,6 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/const_values.dart';
+import 'package:expenz/models/expence_model.dart';
 import 'package:flutter/material.dart';
 
 class AddNewScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _AddNewScreenState extends State<AddNewScreen> {
               child: Stack(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: kDefaultPadding),
+                    padding: const EdgeInsets.all(5),
                     child: Container(
                       height: MediaQuery.of(context).size.height * 0.06,
                       decoration: BoxDecoration(
@@ -73,23 +74,62 @@ class _AddNewScreenState extends State<AddNewScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text("How Much?", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: kWhite)),
-                        TextField(
-                    style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: kWhite ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "0.00",
-                      hintStyle: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: kWhite.withOpacity(0.5) ),
-                  ),
-                  ),
-                      ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal:   8.0),
+                    child: Container(
+                      margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("How Much?", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: kWhite)),
+                          TextField(
+                      style: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: kWhite ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "0.00",
+                        hintStyle: TextStyle(fontSize: 60, fontWeight: FontWeight.bold, color: kWhite.withOpacity(0.5) ),
+                    ),
+                    ),
+                        ],
+                      ),
                     ),
                   ),
+
+                  //user data form
+                  Container(
+                    height: 300,
+                    margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.3),
+                    decoration: BoxDecoration(
+                      color: kWhite,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      )
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Form(
+                        child: Column(
+                          children:[
+                            //category selector dropdown
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelText: "Select Category",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                              ),
+                              items: ExpenceCategories.values.map((category) {
+                              return DropdownMenuItem(
+                                value: category,
+                                child: Text(category.name),
+                              );
+                            }).toList(), onChanged: (value){})
+                          ]
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
