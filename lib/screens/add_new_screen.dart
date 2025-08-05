@@ -17,6 +17,17 @@ class _AddNewScreenState extends State<AddNewScreen> {
   int _selectedMethod = 0;
   ExpenceCategories _expenceCategory = ExpenceCategories.health;
   IncomeCategory _incomeCategory = IncomeCategory.salary;
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _amountController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +111,7 @@ class _AddNewScreenState extends State<AddNewScreen> {
 
                   //user data form
                   Container(
-                    height: 300,
+                    height: MediaQuery.of(context).size.height * 0.6,
                     margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.3),
                     decoration: BoxDecoration(
                       color: kWhite,
@@ -121,6 +132,7 @@ class _AddNewScreenState extends State<AddNewScreen> {
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(100),
                                 ),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: kDefaultPadding),
                               ),
                               items: _selectedMethod==0 ? ExpenceCategories.values.map((category) {
                               return DropdownMenuItem(
@@ -146,7 +158,44 @@ class _AddNewScreenState extends State<AddNewScreen> {
                                   _incomeCategory = value as IncomeCategory;
                                 });
                               }
-                            })
+                            }),
+                            const SizedBox(height: 16),
+                            //title field
+                            TextFormField(
+                              controller: _titleController,
+                              decoration: InputDecoration(
+                                labelText: "Title",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: kDefaultPadding),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            //description field
+                            TextFormField(
+                              controller: _descriptionController,
+                              decoration: InputDecoration(
+                                labelText: "Description",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: kDefaultPadding),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            //amount field
+                            TextFormField(
+                              controller: _amountController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: "Amount",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: kDefaultPadding),
+                              ),
+                            ),
                           ]
                         ),
                       ),
