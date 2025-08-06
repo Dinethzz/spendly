@@ -1,6 +1,6 @@
-# expenz
+# Spendly
 
-A new Flutter project.
+A new Flutter project for track income and expences
 
 ## Getting Started
 
