@@ -3,6 +3,7 @@ import 'package:expenz/constants/const_values.dart';
 import 'package:expenz/models/expence_model.dart';
 import 'package:expenz/models/income_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AddNewScreen extends StatefulWidget {
   const AddNewScreen({super.key});
@@ -20,6 +21,8 @@ class _AddNewScreenState extends State<AddNewScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+
+  DateTime _selectedDate = DateTime.now();
 
   @override
   void dispose() {
@@ -196,6 +199,60 @@ class _AddNewScreenState extends State<AddNewScreen> {
                                 contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: kDefaultPadding),
                               ),
                             ),
+                            const SizedBox(height: 16),
+                            //date picker
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                              GestureDetector(
+                                onTap: () {
+                                  showDatePicker(
+                                    context: context, 
+                                    firstDate: DateTime(2020), 
+                                    lastDate: DateTime(2025), 
+                                    initialDate: DateTime.now()).then((value){
+                                      if(value != null){
+                                        setState(() {
+                                          _selectedDate = value;
+                                        });
+                                      }
+                                    });
+
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: kMainColor,
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(color: kGrey),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_month_outlined,
+                                          color: kWhite,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          "Select Date",
+                                           style: TextStyle(
+                                           color: kWhite,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ),
+                              ),
+                              Text(DateFormat.yMMMd().format(_selectedDate), // Display selected date
+                                style: TextStyle(
+                                  color: kGrey,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                            )
                           ]
                         ),
                       ),
