@@ -2,6 +2,7 @@ import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/const_values.dart';
 import 'package:expenz/models/expence_model.dart';
 import 'package:expenz/models/income_model.dart';
+import 'package:expenz/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -23,6 +24,7 @@ class _AddNewScreenState extends State<AddNewScreen> {
   final TextEditingController _descriptionController = TextEditingController();
 
   DateTime _selectedDate = DateTime.now();
+  DateTime _selectedTime = DateTime.now();
 
   @override
   void dispose() {
@@ -114,13 +116,15 @@ class _AddNewScreenState extends State<AddNewScreen> {
 
                   //user data form
                   Container(
+                    padding: const EdgeInsets.only(top: 15, left: 8, right: 8),
                     height: MediaQuery.of(context).size.height * 0.6,
+                    width: double.infinity,
                     margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.3),
                     decoration: BoxDecoration(
                       color: kWhite,
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
                       )
                     ),
                     child: Padding(
@@ -131,7 +135,6 @@ class _AddNewScreenState extends State<AddNewScreen> {
                             //category selector dropdown
                             DropdownButtonFormField(
                               decoration: InputDecoration(
-                                labelText: "Select Category",
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(100),
                                 ),
@@ -252,7 +255,73 @@ class _AddNewScreenState extends State<AddNewScreen> {
                                 ),
                               ),
                             ],
-                            )
+                            ),
+                            const SizedBox(height: 16),
+
+                            //Time picker
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                              GestureDetector(
+                                onTap: () {
+                                  showTimePicker(
+                                    context: context, 
+                                    initialTime: TimeOfDay.now()).then((value){
+                                      if(value != null){
+                                        setState(() {
+                                          _selectedTime = DateTime(
+                                            _selectedDate.year,
+                                            _selectedDate.month,
+                                            _selectedDate.day,
+                                            value.hour,
+                                            value.minute
+                                          );
+                                        });
+                                      }
+                                    });
+
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: kYellow,
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(color: kGrey),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 10.0),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.timer_sharp,
+                                          color: kBlack,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        Text(
+                                          "Select Time",
+                                           style: TextStyle(
+                                           color: kBlack,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                ),
+                              ),
+                              Text(DateFormat.jm().format(_selectedTime), // Display selected time
+                                style: TextStyle(
+                                  color: kGrey,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                            ),
+                            const SizedBox(height: 16),
+                            Divider(
+                              color: kGrey,
+                              thickness: 1,
+                            ),
+                            const SizedBox(height: 16),
+                            CustomButton(buttonName: "Add", buttonColor: _selectedMethod == 0 ? kRed : kGreen)
                           ]
                         ),
                       ),
