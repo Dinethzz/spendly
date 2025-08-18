@@ -321,7 +321,13 @@ class _AddNewScreenState extends State<AddNewScreen> {
                               thickness: 1,
                             ),
                             const SizedBox(height: 16),
-                            CustomButton(buttonName: "Add", buttonColor: _selectedMethod == 0 ? kRed : kGreen)
+                            GestureDetector(
+                              onTap: () {
+                                // Handle button tap
+                              },
+                              child: CustomButton(
+                                buttonName: "Add", buttonColor: _selectedMethod == 0 ? kRed : kGreen),
+                            )
                           ]
                         ),
                       ),
