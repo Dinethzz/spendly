@@ -1,11 +1,13 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/models/expence_model.dart';
+import 'package:expenz/models/income_model.dart';
 import 'package:expenz/screens/add_new_screen.dart';
 import 'package:expenz/screens/budget_screen.dart';
 import 'package:expenz/screens/home_screen.dart';
 import 'package:expenz/screens/profile_screen.dart';
 import 'package:expenz/screens/transaction_screen.dart';
 import 'package:expenz/services/expence_service.dart';
+import 'package:expenz/services/income_service.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatefulWidget {
@@ -19,6 +21,8 @@ class _MainScreenState extends State<MainScreen> {
   int _currentPageIndex = 0;
 
   List<Expence> expenceList = [];
+  List<Income> incomeList = [];
+
   //function to fetch expences
   void fetchAllExpences() async {
     List<Expence> loadedExpences = await ExpenseService().loadExpences();
@@ -26,7 +30,13 @@ class _MainScreenState extends State<MainScreen> {
       expenceList = loadedExpences;
     });
   }
-
+  //function to fetch all incomes
+  void fetchAllIncomes() async {
+    List<Income> loadedIncomes = await IncomeService().loadIncomes(context);
+    setState(() {
+      incomeList = loadedIncomes;
+    });
+  }
   //function to add a new expence
   void addNewExpence(Expence newExpence) {
     ExpenseService().saveExpences(newExpence, context);
@@ -35,12 +45,22 @@ class _MainScreenState extends State<MainScreen> {
       expenceList.add(newExpence);
     });
   }
+  //function to add a new income
+  void addNewIncome(Income newIncome) {
+    IncomeService().saveIncome(newIncome, context);
+
+    setState(() {
+      incomeList.add(newIncome);
+      print(incomeList.length);
+    });
+  }
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       fetchAllExpences();
+      fetchAllIncomes();
     });
   }
 
@@ -51,7 +71,8 @@ class _MainScreenState extends State<MainScreen> {
       const HomeScreen(),
       const TransactionScreen(),
       AddNewScreen(
-        addExpence: addNewExpence
+        addExpence: addNewExpence,
+        addIncome: addNewIncome,
       ),
       const BudgetScreen(),
       const ProfileScreen(),
