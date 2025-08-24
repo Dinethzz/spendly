@@ -1,6 +1,7 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/models/expence_model.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ExpenceCard extends StatelessWidget {
   final String title;
@@ -10,7 +11,7 @@ class ExpenceCard extends StatelessWidget {
   final ExpenceCategories category;
   final DateTime time;
 
-  const ExpenceCard({super.key, required this.title, required this.date, required this.amount, required this.category, required this.time, required this.description});
+  const ExpenceCard({super.key, required this.title, required this.date, required this.amount, required this.category, required this.time, required this.description, required Expence expence});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,16 @@ class ExpenceCard extends StatelessWidget {
             , const SizedBox(height: 5),
             Text(description, style: TextStyle(fontSize: 14, color: kGrey),)
           ],
-        )
+        ),
+        const Spacer(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text("-\$${amount.toStringAsFixed(2)}", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: kRed),)
+            , const SizedBox(height: 5),
+            Text(DateFormat.jm().format(date), style: TextStyle(fontSize: 14, color: kGrey),)
+          ],
+        ),
       ],)
     );
   }

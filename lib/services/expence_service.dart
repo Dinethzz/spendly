@@ -50,6 +50,31 @@ class ExpenseService {
     if (expences != null) {
       loadedexpences = expences.map((e) => Expence.fromJson(json.decode(e))).toList();
     }
-    return expenceList;
+    return loadedexpences;
+  }
+
+  Future <void> deleteExpence (int id, BuildContext context) async{
+    try{
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      List<String>? existingExpences = pref.getStringList(_expenceKey);
+      List<Expence> existingExpencesObjects = [];
+      if(existingExpences != null) {
+        existingExpencesObjects = existingExpences.map((e) => Expence.fromJson(json.decode(e))).toList();
+      }
+      existingExpencesObjects.removeWhere((expence) => expence.id == id);
+      List<String> updatedExpences = existingExpencesObjects.map((e) => json.encode(e.toJson())).toList();
+      await pref.setStringList(_expenceKey, updatedExpences);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Expense deleted successfully!'), duration: Duration(seconds: 2)),
+        );
+      }
+    } catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting expense: $error'), duration: Duration(seconds: 2)),
+        );
+      } 
+    }
   }
 }
