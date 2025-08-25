@@ -70,6 +70,12 @@ class _MainScreenState extends State<MainScreen> {
       expenceList.remove(expence);
     });
   }
+  void removeIncome(Income income) {
+    IncomeService().deleteIncome(income.id, context);
+    setState(() {
+      incomeList.remove(income);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +84,9 @@ class _MainScreenState extends State<MainScreen> {
       const HomeScreen(),
       TransactionScreen(
         expencesList: expenceList,
+        incomesList: incomeList,
         onDismissedExpence: removeExpence,
+        onDismissedIncome: removeIncome,
       ),
       AddNewScreen(
         addExpence: addNewExpence,

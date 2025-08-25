@@ -1,13 +1,17 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/const_values.dart';
 import 'package:expenz/models/expence_model.dart';
+import 'package:expenz/models/income_model.dart';
 import 'package:expenz/widgets/expence_card.dart';
+import 'package:expenz/widgets/income_card.dart';
 import 'package:flutter/material.dart';
 
 class TransactionScreen extends StatefulWidget {
   final List<Expence> expencesList;
+  final List<Income> incomesList;
   final void Function(Expence) onDismissedExpence;
-  const TransactionScreen({super.key, required this.expencesList, required this.onDismissedExpence});
+  final void Function(Income) onDismissedIncome;
+  const TransactionScreen({super.key, required this.expencesList, required this.onDismissedExpence, required this.incomesList, required this.onDismissedIncome});
 
   @override
   State<TransactionScreen> createState() => _TransactionScreenState();
@@ -28,7 +32,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               Text("Expences", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: kBlack),)
               , const SizedBox(height: 20),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.35,
+                height: MediaQuery.of(context).size.height * 0.30,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -55,6 +59,46 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               amount: expence.amount,
                               category: expence.category,
                               time: expence.time,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+
+              const SizedBox(height: 20),
+              Text("Income", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: kBlack),)
+              , const SizedBox(height: 20),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.30,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: widget.incomesList.length,
+                        itemBuilder: (context, index) {
+                          final income = widget.incomesList[index];
+                          return Dismissible(
+                            key: ValueKey(income),
+                            direction: DismissDirection.startToEnd,
+                            onDismissed: (direction) {
+                              setState(() {
+                                widget.onDismissedIncome(income);
+                              });
+                            },
+                            child: IncomeCard(
+                              title: income.title,
+                              description: income.description,
+                              date: income.date,
+                              amount: income.amount,
+                              category: income.category,
+                              time: income.time,
                             ),
                           );
                         },
