@@ -1,12 +1,16 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/const_values.dart';
+import 'package:expenz/models/expence_model.dart';
 import 'package:expenz/services/user_service.dart';
+import 'package:expenz/widgets/expence_card.dart';
 import 'package:expenz/widgets/income_expence_card.dart';
 import 'package:expenz/widgets/line_chart.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final List<Expence> expencesList;
+
+  const HomeScreen({super.key, required this.expencesList});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -113,10 +117,46 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 20),
                     LineChartSample(),
                   ],
                 ),
+              ),
+              //recent transactions
+              Padding(padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Recent Transactions",
+                    style: TextStyle(
+                      color: kBlack,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Column(children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: widget.expencesList.length,
+                        itemBuilder: (context, index) {
+                          final expence = widget.expencesList[index];
+                          return ExpenceCard(
+                            expence: expence,
+                            title: expence.title,
+                            description: expence.description,
+                            date: expence.date,
+                            amount: expence.amount,
+                            category: expence.category,
+                            time: expence.time,
+                          );
+                        },
+                  )
+                ],)
+                ]
+              ),
               )
             ],
           ),
