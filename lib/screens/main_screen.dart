@@ -79,10 +79,27 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Calculate category totals for budget screen
+    Map<ExpenceCategories, double> expenseCategoryTotals = {};
+    Map<IncomeCategory, double> incomeCategoryTotals = {};
+    
+    // Calculate expense totals by category
+    for (var expense in expenceList) {
+      expenseCategoryTotals[expense.category] = 
+          (expenseCategoryTotals[expense.category] ?? 0) + expense.amount;
+    }
+    
+    // Calculate income totals by category
+    for (var income in incomeList) {
+      incomeCategoryTotals[income.category] = 
+          (incomeCategoryTotals[income.category] ?? 0) + income.amount;
+    }
+
     //screen list
     final List<Widget> screens = [
       HomeScreen(
         expencesList: expenceList,
+        incomesList: incomeList,
       ),
       TransactionScreen(
         expencesList: expenceList,
@@ -94,7 +111,10 @@ class _MainScreenState extends State<MainScreen> {
         addExpence: addNewExpence,
         addIncome: addNewIncome,
       ),
-      const BudgetScreen(),
+      BudgetScreen(
+        expenseCategoryTotals: expenseCategoryTotals,
+        incomeCategoryTotals: incomeCategoryTotals,
+      ),
       const ProfileScreen(),
     ];
     return Scaffold(

@@ -1,16 +1,19 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/const_values.dart';
 import 'package:expenz/models/expence_model.dart';
+import 'package:expenz/models/income_model.dart';
 import 'package:expenz/services/user_service.dart';
 import 'package:expenz/widgets/expence_card.dart';
+import 'package:expenz/widgets/income_card.dart';
 import 'package:expenz/widgets/income_expence_card.dart';
 import 'package:expenz/widgets/line_chart.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   final List<Expence> expencesList;
+  final List<Income> incomesList;
 
-  const HomeScreen({super.key, required this.expencesList});
+  const HomeScreen({super.key, required this.expencesList, required this.incomesList});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -43,6 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
   
   @override
   Widget build(BuildContext context) {
+    // Calculate total income and expenses
+    double totalIncome = widget.incomesList.fold(0.0, (sum, income) => sum + income.amount);
+    double totalExpenses = widget.expencesList.fold(0.0, (sum, expense) => sum + expense.amount);
+    
     return Scaffold(
       body: SafeArea(child: SingleChildScrollView(
         child: Padding(
@@ -98,8 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        IncomeExpenceCard(title: "Income", amount: 1200, imageUrl: "assets/images/income.png", bgcolor: kGreen),
-                        IncomeExpenceCard(title: "Expence", amount: 1200, imageUrl: "assets/images/expence.png", bgcolor: kRed),
+                        IncomeExpenceCard(title: "Income", amount: totalIncome, imageUrl: "assets/images/income.png", bgcolor: kGreen),
+                        IncomeExpenceCard(title: "Expense", amount: totalExpenses, imageUrl: "assets/images/expence.png", bgcolor: kRed),
                       ],
                     )
                   ],
@@ -135,26 +142,86 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 SizedBox(height: 10),
-                Column(children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: widget.expencesList.length,
-                        itemBuilder: (context, index) {
-                          final expence = widget.expencesList[index];
-                          return ExpenceCard(
-                            expence: expence,
-                            title: expence.title,
-                            description: expence.description,
-                            date: expence.date,
-                            amount: expence.amount,
-                            category: expence.category,
-                            time: expence.time,
+                widget.expencesList.isEmpty && widget.incomesList.isEmpty
+                    ? Container(
+                        height: 100,
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.history,
+                              size: 48,
+                              color: kGrey.withOpacity(0.5),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "No transactions yet",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: kGrey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Builder(
+                        builder: (context) {
+                          // Create a combined list of transactions with their dates
+                          List<Map<String, dynamic>> allTransactions = [];
+                          
+                          // Add expenses
+                          for (var expence in widget.expencesList) {
+                            allTransactions.add({
+                              'type': 'expense',
+                              'data': expence,
+                              'date': expence.date,
+                            });
+                          }
+                          
+                          // Add incomes
+                          for (var income in widget.incomesList) {
+                            allTransactions.add({
+                              'type': 'income',
+                              'data': income,
+                              'date': income.date,
+                            });
+                          }
+                          
+                          // Sort by date (most recent first)
+                          allTransactions.sort((a, b) => (b['date'] as DateTime).compareTo(a['date'] as DateTime));
+                          
+                          // Take first 5 transactions
+                          final recentTransactions = allTransactions.take(5).toList();
+                          
+                          return Column(
+                            children: recentTransactions.map((transaction) {
+                              if (transaction['type'] == 'expense') {
+                                final expence = transaction['data'] as Expence;
+                                return ExpenceCard(
+                                  expence: expence,
+                                  title: expence.title,
+                                  description: expence.description,
+                                  date: expence.date,
+                                  amount: expence.amount,
+                                  category: expence.category,
+                                  time: expence.time,
+                                );
+                              } else {
+                                final income = transaction['data'] as Income;
+                                return IncomeCard(
+                                  title: income.title,
+                                  description: income.description,
+                                  date: income.date,
+                                  amount: income.amount,
+                                  category: income.category,
+                                  time: income.time,
+                                );
+                              }
+                            }).toList(),
                           );
                         },
-                  )
-                ],)
+                      )
                 ]
               ),
               )
