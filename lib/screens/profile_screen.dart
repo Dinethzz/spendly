@@ -3,6 +3,7 @@ import 'package:expenz/constants/const_values.dart';
 import 'package:expenz/models/expence_model.dart';
 import 'package:expenz/models/income_model.dart';
 import 'package:expenz/screens/onboarding_screen.dart';
+import 'package:expenz/screens/settings_screen.dart';
 import 'package:expenz/screens/wallet_screen.dart';
 import 'package:expenz/services/user_service.dart';
 import 'package:expenz/widgets/profile_card.dart';
@@ -215,10 +216,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: kMainColor,
                   ),
                 ),
-                const ProfileCard(
-                  icon: Icons.settings,
-                  title: "Settings",
-                  color: kMainColor,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SettingsScreen(),
+                      ),
+                    );
+                  },
+                  child: const ProfileCard(
+                    icon: Icons.settings,
+                    title: "Settings",
+                    color: kMainColor,
+                  ),
                 ),
                 const ProfileCard(
                   icon: Icons.download,
