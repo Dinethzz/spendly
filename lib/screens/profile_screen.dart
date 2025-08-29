@@ -1,13 +1,23 @@
 import 'package:expenz/constants/colors.dart';
 import 'package:expenz/constants/const_values.dart';
+import 'package:expenz/models/expence_model.dart';
+import 'package:expenz/models/income_model.dart';
 import 'package:expenz/screens/onboarding_screen.dart';
+import 'package:expenz/screens/wallet_screen.dart';
 import 'package:expenz/services/user_service.dart';
 import 'package:expenz/widgets/profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final List<Expence> expencesList;
+  final List<Income> incomesList;
+
+  const ProfileScreen({
+    super.key,
+    required this.expencesList,
+    required this.incomesList,
+  });
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -187,10 +197,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                const ProfileCard(
-                  icon: Icons.wallet,
-                  title: "My Wallet",
-                  color: kMainColor,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => WalletScreen(
+                          expencesList: widget.expencesList,
+                          incomesList: widget.incomesList,
+                        ),
+                      ),
+                    );
+                  },
+                  child: const ProfileCard(
+                    icon: Icons.wallet,
+                    title: "My Wallet",
+                    color: kMainColor,
+                  ),
                 ),
                 const ProfileCard(
                   icon: Icons.settings,
