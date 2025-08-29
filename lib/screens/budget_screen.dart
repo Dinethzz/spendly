@@ -130,14 +130,17 @@ class _BudgetScreenState extends State<BudgetScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            // Pie chart
-            Chart(
-              expenseCategoryTotals: widget.expenseCategoryTotals,
-              incomeCategoryTotals: widget.incomeCategoryTotals,
-              isExpense: _selected == 0,
+            const SizedBox(height: 40),
+            // Pie chart with proper spacing
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding * 1.5),
+              child: Chart(
+                expenseCategoryTotals: widget.expenseCategoryTotals,
+                incomeCategoryTotals: widget.incomeCategoryTotals,
+                isExpense: _selected == 0,
+              ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 50),
             // List of categories - now takes remaining space
             Expanded(
               child: data.isEmpty
