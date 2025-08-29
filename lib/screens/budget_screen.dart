@@ -52,115 +52,144 @@ class _BudgetScreenState extends State<BudgetScreen> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.06,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: kWhite,
-                    boxShadow: [
-                      BoxShadow(
-                        color: kBlack.withOpacity(0.1),
-                        blurRadius: 20,
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selected = 0;
-                          });
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: _selected == 1 ? kWhite : kRed,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.06,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: kWhite,
+                  boxShadow: [
+                    BoxShadow(
+                      color: kBlack.withOpacity(0.1),
+                      blurRadius: 20,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selected = 0;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: _selected == 1 ? kWhite : kRed,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 60,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 60,
-                            ),
-                            child: Text(
-                              "Expense",
-                              style: TextStyle(
-                                color: _selected == 0 ? kWhite : kBlack,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                              ),
+                          child: Text(
+                            "Expense",
+                            style: TextStyle(
+                              color: _selected == 0 ? kWhite : kBlack,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
                             ),
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selected = 1;
-                          });
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: _selected == 0 ? kWhite : kGreen,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selected = 1;
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: _selected == 0 ? kWhite : kGreen,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 60,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 60,
-                            ),
-                            child: Text(
-                              "Income",
-                              style: TextStyle(
-                                color: _selected == 1 ? kWhite : kBlack,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                              ),
+                          child: Text(
+                            "Income",
+                            style: TextStyle(
+                              color: _selected == 1 ? kWhite : kBlack,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
                             ),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 20),
-              // Pie chart
-              Chart(
-                expenseCategoryTotals: widget.expenseCategoryTotals,
-                incomeCategoryTotals: widget.incomeCategoryTotals,
-                isExpense: _selected == 0,
-              ),
-              const SizedBox(height: 50),
-              // List of categories
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.3,
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    final category = data.keys.toList()[index];
-                    final total = data.values.toList()[index];
-                    return CategoryCard(
-                      title: category.name,
-                      amount: total,
-                      totalAmount: data.values.reduce((a, b) => a + b),
-                      progressColor: getCategoryColor(category),
-                      isExpense: _selected == 0,
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 20),
+            // Pie chart
+            Chart(
+              expenseCategoryTotals: widget.expenseCategoryTotals,
+              incomeCategoryTotals: widget.incomeCategoryTotals,
+              isExpense: _selected == 0,
+            ),
+            const SizedBox(height: 30),
+            // List of categories - now takes remaining space
+            Expanded(
+              child: data.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            _selected == 0 ? Icons.receipt_long_outlined : Icons.attach_money_outlined,
+                            size: 64,
+                            color: kGrey.withOpacity(0.5),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            _selected == 0 ? "No expenses yet" : "No income yet",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: kGrey,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            _selected == 0 
+                                ? "Add some expenses to see the breakdown"
+                                : "Add some income to see the breakdown",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: kGrey.withOpacity(0.8),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final category = data.keys.toList()[index];
+                        final total = data.values.toList()[index];
+                        return CategoryCard(
+                          title: category.name,
+                          amount: total,
+                          totalAmount: data.values.reduce((a, b) => a + b),
+                          progressColor: getCategoryColor(category),
+                          isExpense: _selected == 0,
+                        );
+                      },
+                    ),
+            ),
+          ],
         ),
       ),
     );
